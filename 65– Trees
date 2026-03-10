@@ -1,0 +1,37 @@
+ JavaScript code (BFS level order)
+Assume the standard definition:
+
+// Definition for a binary tree node.
+function TreeNode(val, left = null, right = null) {
+  this.val = val;
+  this.left = left;
+  this.right = right;
+}
+
+/**
+ * @param {TreeNode} rootx
+ */
+function levelOrder(root) {
+  const result = [];
+  if (root === null) return result;
+
+  const queue = [root];
+
+  while (queue.length > 0) {
+    const levelSize = queue.length;
+    const currentLevel = [];
+
+    for (let i = 0; i < levelSize; i++) {
+      const node = queue.shift();
+      currentLevel.push(node.val);
+
+      if (node.left !== null) queue.push(node.left);
+      if (node.right !== null) queue.push(node.right);
+    }
+
+    result.push(currentLevel);
+  }
+
+  return result;
+}
+2
