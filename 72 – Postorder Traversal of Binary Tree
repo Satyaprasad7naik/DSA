@@ -1,0 +1,100 @@
+// 72-PostorderTraversalBinaryTree.js
+// Postorder Traversal of Binary Tree
+// Visits nodes in the order: left -> right -> root
+
+class TreeNode {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+/**
+ * Recursive postorder traversal
+ * @param {TreeNode} root
+ * @returns {number[]}
+ */
+function postorderTraversalRecursive(root) {
+  const result = [];
+
+  function dfs(node) {
+    if (!node) return;
+    dfs(node.left);
+    dfs(node.right);
+    result.push(node.val);
+  }
+
+  dfs(root);
+  return result;
+}
+
+/**
+ * Iterative postorder traversal using one stack
+ * @param {TreeNode} root
+ * @returns {number[]}
+ */
+function postorderTraversalIterative(root) {
+  const result = [];
+  if (!root) return result;
+
+  const stack = [];
+  let current = root;
+  let lastVisited = null;
+
+  while (stack.length > 0 || current) {
+    // Go as left as possible
+    if (current) {
+      stack.push(current);
+      current = current.left;
+    } else {
+      const peekNode = stack[stack.length - 1];
+
+      // If right child exists and not processed yet, go right
+      if (peekNode.right && lastVisited !== peekNode.right) {
+        current = peekNode.right;
+      } else {
+        // Visit node
+        result.push(peekNode.val);
+        lastVisited = stack.pop();
+      }
+    }
+  }
+
+  return result;
+}
+
+// Example usage and simple tests
+function buildSampleTree() {
+  //      1
+  //     / \
+  //    2   3
+  //   / \
+  //  4   5
+  const node4 = new TreeNode(4);
+  const node5 = new TreeNode(5);
+  const node2 = new TreeNode(2, node4, node5);
+  const node3 = new TreeNode(3);
+  const node1 = new TreeNode(1, node2, node3);
+  return node1;
+}
+
+function runTests() {
+  const root = buildSampleTree();
+
+  const recursiveResult = postorderTraversalRecursive(root);
+  const iterativeResult = postorderTraversalIterative(root);
+
+  console.log("Recursive postorder:", recursiveResult); // [4, 5, 2, 3, 1]
+  console.log("Iterative postorder:", iterativeResult); // [4, 5, 2, 3, 1]
+}
+
+if (require.main === module) {
+  runTests();
+}
+
+module.exports = {
+  TreeNode,
+  postorderTraversalRecursive,
+  postorderTraversalIterative,
+};
