@@ -1,0 +1,27 @@
+// 78 - Subsets
+// Time: O(2^n * n), Space: O(2^n)
+
+function subsets(nums) {
+  const result = [];
+  const current = [];
+
+  function backtrack(start) {
+    // Push a copy of current subset
+    result.push([...current]);
+
+    // Try adding each remaining element
+    for (let i = start; i < nums.length; i++) {
+      current.push(nums[i]);        // choose
+      backtrack(i + 1);             // explore
+      current.pop();                // un-choose (backtrack)
+    }
+  }
+
+  backtrack(0);
+  return result;
+}
+
+// Example usage:
+console.log(subsets([1, 2, 3]));
+// Output (order may vary):
+// [ [], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3] ]
