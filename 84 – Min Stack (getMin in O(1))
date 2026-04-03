@@ -1,0 +1,75 @@
+// 84-MinStack.js
+
+/**
+ * MinStack
+ * Supports:
+ *  - push(x)
+ *  - pop()
+ *  - top()
+ *  - getMin()
+ * All in O(1) time.
+ */
+
+class MinStack {
+  constructor() {
+    this.stack = [];
+    this.minStack = []; // keeps track of current minimums
+  }
+
+  /**
+   * Push element x onto stack.
+   * @param {number} x
+   */
+  push(x) {
+    this.stack.push(x);
+
+    // If minStack is empty or x <= current min, push to minStack
+    if (this.minStack.length === 0 || x <= this.getMin()) {
+      this.minStack.push(x);
+    }
+  }
+
+  /**
+   * Removes the element on top of the stack.
+   * @return {void}
+   */
+  pop() {
+    if (this.stack.length === 0) return;
+
+    const removed = this.stack.pop();
+    // If the removed element is equal to current min, pop from minStack too
+    if (removed === this.getMin()) {
+      this.minStack.pop();
+    }
+  }
+
+  /**
+   * Get the top element.
+   * @return {number | null}
+   */
+  top() {
+    if (this.stack.length === 0) return null;
+    return this.stack[this.stack.length - 1];
+  }
+
+  /**
+   * Retrieve the minimum element in the stack.
+   * @return {number | null}
+   */
+  getMin() {
+    if (this.minStack.length === 0) return null;
+    return this.minStack[this.minStack.length - 1];
+  }
+}
+
+// Example usage / basic tests
+const minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+console.log(minStack.getMin()); // -3
+minStack.pop();
+console.log(minStack.top());    // 0
+console.log(minStack.getMin()); // -2
+
+module.exports = MinStack;
