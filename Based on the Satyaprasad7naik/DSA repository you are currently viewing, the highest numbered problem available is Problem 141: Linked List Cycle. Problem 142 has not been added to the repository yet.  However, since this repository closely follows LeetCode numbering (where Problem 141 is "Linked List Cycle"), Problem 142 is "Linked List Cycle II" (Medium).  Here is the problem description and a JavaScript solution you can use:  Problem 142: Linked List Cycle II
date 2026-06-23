@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ * this.val = val;
+ * this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var detectCycle = function(head) {
+    let slow = head;
+    let fast = head;
+
+    // Phase 1: Determine if a cycle exists
+    while (fast !== null && fast.next !== null) {
+        slow = slow.next;         // Moves 1 step
+        fast = fast.next.next;    // Moves 2 steps
+
+        // If they meet, a cycle exists
+        if (slow === fast) {
+            
+            // Phase 2: Find the start of the cycle
+            let pointer1 = head;
+            let pointer2 = slow;
+            
+            // Move both pointers at the same speed until they meet
+            while (pointer1 !== pointer2) {
+                pointer1 = pointer1.next;
+                pointer2 = pointer2.next;
+            }
+            
+            // The meeting point is the start of the cycle
+            return pointer1; 
+        }
+    }
+
+    // Fast pointer reached the end of the list, so there is no cycle
+    return null; 
+};
