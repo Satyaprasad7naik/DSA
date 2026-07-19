@@ -1,0 +1,51 @@
+/**
+ * Definition for read4()
+ * 
+ * @param {character[]} buf4 Destination buffer
+ * @return {number} The number of actual characters read
+ * read4 = function(buf4) {
+ *     ...
+ * };
+ */
+
+/**
+ * @param {function} read4()
+ * @return {function}
+ */
+var solution = function(read4) {
+    // State variables to maintain leftover characters between multiple read() calls
+    let internalBuf = [];
+    
+    /**
+     * @param {character[]} buf Destination buffer
+     * @param {number} n Number of characters to read
+     * @return {number} The number of actual characters read
+     */
+    return function(buf, n) {
+        let copiedChars = 0;
+        let buf4 = new Array(4);
+        
+        while (copiedChars < n) {
+            // If our internal buffer is empty, fetch more characters using read4
+            if (internalBuf.length === 0) {
+                let readChars = read4(buf4);
+                
+                // If we reach the End of File (EOF), break out of the loop
+                if (readChars === 0) {
+                    break;
+                }
+                
+                // Store the newly read characters in our internal queue
+                for (let i = 0; i < readChars; i++) {
+                    internalBuf.push(buf4[i]);
+                }
+            }
+            
+            // Shift the first element from our internal queue and copy it to the destination
+            buf[copiedChars] = internalBuf.shift();
+            copiedChars++;
+        }
+        
+        return copiedChars;
+    };
+};
